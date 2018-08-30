@@ -1,0 +1,57 @@
+﻿<core:NyaControl
+    x:Class="SenpaiControls.LessonView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:core="using:Nyantilities.Core"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    x:Name="thisView">
+
+    <UserControl.Resources>
+
+        <SolidColorBrush x:Key="Selected" Color="#FF6464FF"/>
+        <SolidColorBrush x:Key="Deselected" Color="Black"/>
+
+        <Style TargetType="TextBlock" x:Key="LessonName">
+            <!--<Setter Property="FontFamily"   Value="Comic Sans MS"/>-->
+            <Setter Property="FontSize"     Value="20"/>
+            <Setter Property="Padding"      Value="0,4,0,0"/>
+            <Setter Property="Height"       Value="auto"/>
+            <Setter Property="Width"        Value="auto"/>
+            <Setter Property="TextWrapping" Value="NoWrap"/>
+            <Setter Property="Foreground"   Value="Black"/>
+            <Setter Property="Margin"       Value="10,0"/>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="LessonDetail">
+            <!--<Setter Property="FontFamily"   Value="Comic Sans MS"/>-->
+            <Setter Property="FontSize"     Value="14.667"/>
+            <Setter Property="Height"       Value="auto"/>
+            <Setter Property="Width"        Value="auto"/>
+            <Setter Property="TextWrapping" Value="NoWrap"/>
+            <Setter Property="Foreground"   Value="#FF7E7E7E"/>
+            <Setter Property="Margin"       Value="10,0"/>
+        </Style>
+
+        <LinearGradientBrush x:Key="NormalBrush" StartPoint="0.0,0.5" EndPoint="1.0,0.5">
+            <GradientStop Color="#FFFFFFFF" Offset="0.0"/>
+            <GradientStop Color="#FF66FF88" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="DueBrush" StartPoint="0.0,0.5" EndPoint="1.0,0.5">
+            <GradientStop Color="#FFFFFFFF" Offset="0.0"/>
+            <GradientStop Color="#FFFF4444" Offset="1.0"/>
+        </LinearGradientBrush>
+
+    </UserControl.Resources>
+
+    <Grid x:Name="LayoutRoot" Background="{StaticResource NormalBrush}">
+        <StackPanel Margin="0">
+            <TextBlock Style="{StaticResource LessonName}"   Text="{Binding Lesson.Name   , ElementName=thisView}">Minna no Nihongo 1</TextBlock>
+            <TextBlock Style="{StaticResource LessonDetail}" Text="{Binding Lesson.Details, ElementName=thisView}">In 2 Tagen fällig</TextBlock>
+        </StackPanel>
+    </Grid>
+</core:NyaControl>
