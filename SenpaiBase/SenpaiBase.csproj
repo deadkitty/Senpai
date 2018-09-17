@@ -106,8 +106,13 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Converter\AnswerToVisibleConverter.cs" />
+    <Compile Include="Converter\EditToVisibleConverter.cs" />
+    <Compile Include="Converter\LessonTypeConverter.cs" />
+    <Compile Include="Converter\PracticeToVisibleConverter.cs" />
     <Compile Include="EnumerationTypes\LessonItemType.cs" />
     <Compile Include="EnumerationTypes\LessonType.cs" />
+    <Compile Include="EnumerationTypes\PracticeState.cs" />
     <Compile Include="EnumerationTypes\SenpaiState.cs" />
     <Compile Include="EnumerationTypes\VisibilityType.cs" />
     <Compile Include="EnumerationTypes\VocabType.cs" />

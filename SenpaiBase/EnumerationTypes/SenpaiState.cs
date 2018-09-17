@@ -11,37 +11,6 @@ namespace SenpaiBase.EnumerationTypes
 {
     public class ESenpaiState : NyaEnum<String>
     {
-        #region Current State
-
-        private static ESenpaiState current;
-        public static ESenpaiState Current
-        {
-            get { return current; }
-            set
-            {
-                DebugHelper.WriteLine<ESenpaiState>(String.Format("ApplicationState changing ... Old State: {0}. New State: {1}", current, value));
-                current = value;
-                NotifyStateChanged();
-            }
-        }
-        
-        public static event PropertyChangedEventHandler CurrentChanged;
-
-        private static void NotifyStateChanged()
-        {
-            if (HasListeners())
-            {
-                CurrentChanged(Current, new PropertyChangedEventArgs("Current"));
-            }
-        }
-
-        private static bool HasListeners()
-        {
-            return CurrentChanged != null;
-        }
-
-        #endregion
-
         #region EnumValues
 
         public const String _PracticeMode = "PracticeMode";

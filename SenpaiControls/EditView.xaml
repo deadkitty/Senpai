@@ -1,0 +1,126 @@
+﻿<core:NyaControl
+    x:Class="SenpaiControls.EditView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:core="using:Nyantilities.Core"
+    xmlns:ctrl="using:Nyantilities.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <core:NyaControl.Resources>
+
+        <SolidColorBrush x:Key="ButtonBackground" Color="#A0E0FF"/>
+        
+        <Style TargetType="ctrl:NyaButton">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="Margin"              Value="10"/>
+            <Setter Property="FontSize"            Value="24"/>
+            <Setter Property="Background"          Value="{StaticResource ButtonBackground}"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin"   Value="0,10,0,5"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+
+        <Style TargetType="ListViewItem">
+            <Setter Property="Margin"  Value="0"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="MinHeight" Value="30"/>
+        </Style>
+
+    </core:NyaControl.Resources>
+
+    <Grid Padding="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="Kana"/>
+            <TextBlock Grid.Row="2" Text="Kanji"/>
+            <TextBlock Grid.Row="4" Text="Übersetzung"/>
+            <TextBlock Grid.Row="6" Text="Beschreibung"/>
+            <TextBlock Grid.Row="8" Text="Beispiel"/>
+
+            <TextBox Grid.Row="1" Text="{Binding Word.Kana,        ElementName=thisView, Mode=TwoWay}"/>
+            <TextBox Grid.Row="3" Text="{Binding Word.Kanji,       ElementName=thisView, Mode=TwoWay}"/>
+            <TextBox Grid.Row="5" Text="{Binding Word.Translation, ElementName=thisView, Mode=TwoWay}"/>
+            <TextBox Grid.Row="7" Text="{Binding Word.Description, ElementName=thisView, Mode=TwoWay}"/>
+            <TextBox Grid.Row="9" Text="{Binding Word.Example,     ElementName=thisView, Mode=TwoWay}" TextWrapping="Wrap"/>
+
+        </Grid>
+
+        <Grid Grid.Column="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="Typ"/>
+            <TextBlock Grid.Row="2" Text="Wort anzeigen"/>
+            <TextBlock Grid.Row="4" Text="Beschreibung anzeigen"/>
+
+            <ListView
+                x:Name="EditTypeListview"
+                Grid.Row="1"
+                Background="White"
+                ScrollViewer.VerticalScrollMode="Enabled"
+                SelectionChanged="EditTypeListview_SelectionChanged">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <ListView
+                x:Name="ShowWordListview"
+                Grid.Row="3"
+                Background="White"
+                SelectionChanged="ShowWordListview_SelectionChanged">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <ListView
+                x:Name="ShowDescListview"
+                Grid.Row="5"
+                Background="White"
+                SelectionChanged="ShowDescListview_SelectionChanged">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </Grid>
+    </Grid>
+</core:NyaControl>

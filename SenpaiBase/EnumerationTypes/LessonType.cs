@@ -36,17 +36,4 @@ namespace SenpaiBase.EnumerationTypes
             throw new ArgumentOutOfRangeException();
         }
     }
-
-    public class LessonTypeConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            return ELessonType.Convert(parameter as String);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            return parameter;
-        }
-    }
 }

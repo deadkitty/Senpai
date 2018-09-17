@@ -65,51 +65,49 @@ namespace Senpai
 
         public override void LoadState(LoadStateEventArgs args)
         {
-            ESenpaiState.Current = ESenpaiState.MainMenu;
-            
             AddSortIndexToKanjiLessons();
 
             Lessons = DataManager.Database.Lessons.OrderBy(x => x.SortIndex).ToList();
             
-            Lesson lesson1 = new Lesson()
-            {
-                  Name      = "Minna no Nihongo 1"
-                , Size      = 0
-                , SortIndex = 0
-                , Type      = ELessonType.Vocab
-            };
+            //Lesson lesson1 = new Lesson()
+            //{
+            //      Name      = "Minna no Nihongo 1"
+            //    , Size      = 0
+            //    , SortIndex = 0
+            //    , Type      = ELessonType.Vocab
+            //};
             
-            Lesson lesson2 = new Lesson()
-            {
-                  Name      = "Minna no Nihongo 2"
-                , Size      = 0
-                , SortIndex = 1
-                , Type      = ELessonType.Vocab
-            };
+            //Lesson lesson2 = new Lesson()
+            //{
+            //      Name      = "Minna no Nihongo 2"
+            //    , Size      = 0
+            //    , SortIndex = 1
+            //    , Type      = ELessonType.Vocab
+            //};
             
-            Lesson lesson3 = new Lesson()
-            {
-                  Name      = "Tobira 1"
-                , Size      = 0
-                , SortIndex = 2
-                , Type      = ELessonType.Vocab
-            };
+            //Lesson lesson3 = new Lesson()
+            //{
+            //      Name      = "Tobira 1"
+            //    , Size      = 0
+            //    , SortIndex = 2
+            //    , Type      = ELessonType.Vocab
+            //};
             
-            Lesson lesson4 = new Lesson()
-            {
-                  Name      = "Tobira 2"
-                , Size      = 0
-                , SortIndex = 3
-                , Type      = ELessonType.Vocab
-            };
+            //Lesson lesson4 = new Lesson()
+            //{
+            //      Name      = "Tobira 2"
+            //    , Size      = 0
+            //    , SortIndex = 3
+            //    , Type      = ELessonType.Vocab
+            //};
 
-            Lessons = new List<Lesson>()
-            {
-                lesson1,
-                lesson2,
-                lesson3,
-                lesson4
-            };
+            //Lessons = new List<Lesson>()
+            //{
+            //    lesson1,
+            //    lesson2,
+            //    lesson3,
+            //    lesson4
+            //};
         }
 
         #endregion
@@ -131,11 +129,34 @@ namespace Senpai
         private DelegateCommand QuickStart;
         public DelegateCommand QuickStartCommand => QuickStart ?? (QuickStart = new DelegateCommand(OnQuickStart));
         
-        private void OnStartLesson()
+        private async void OnStartLesson()
         {
             PracticeTimer.UpdateCurrentRound();
 
-            StartPractice();
+            bool lessonsValid = false;
+
+            foreach (Lesson lesson in SelectedLessons)
+            {
+                if (lesson.NextRound > 0 && lesson.NextRound <= PracticeTimer.CurrentRound)
+                {
+                    lessonsValid = true;
+
+                    break;
+                }
+            }
+
+            if (lessonsValid)
+            {
+                StartPractice();
+            }
+            else
+            {
+                MessageDialog messageDialog = new MessageDialog("Die ausgewählten Lektionen enthalten keine derzeit zu lernbare Wörter ...");
+
+                messageDialog.Commands.Add(new UICommand("Ok"));
+
+                await messageDialog.ShowAsync();
+            }
         }
         
         private async void OnQuickStart()

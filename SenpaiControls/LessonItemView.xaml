@@ -37,8 +37,8 @@
 
     <Grid x:Name="LayoutRoot">
         <StackPanel Margin="0" >
-            <TextBlock Style="{StaticResource LessonName}"   Text="{Binding LearnItem.Content, ElementName=thisView}">Minna no Nihongo 1</TextBlock>
-            <TextBlock Style="{StaticResource LessonDetail}" Text="{Binding LearnItem.Details, ElementName=thisView}">In 2 Tagen fällig</TextBlock>
+            <TextBlock Style="{StaticResource LessonName}"   Text="{Binding LessonItem.Content, ElementName=thisView}">Minna no Nihongo 1</TextBlock>
+            <TextBlock Style="{StaticResource LessonDetail}" Text="{Binding LessonItem.Details, ElementName=thisView}">In 2 Tagen fällig</TextBlock>
         </StackPanel>
     </Grid>
 </core:NyaControl>

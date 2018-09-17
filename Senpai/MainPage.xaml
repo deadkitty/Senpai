@@ -60,10 +60,18 @@
 
             <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" Margin="10,5" VerticalAlignment="Top">
 
-                <AppBarButton Label="Start" Icon="Play" AccessKey="Space" ToolTipService.ToolTip="Leertaste" Command="{Binding StartLessonCommand}"
-                              IsEnabled="{Binding SelectedItem, ElementName=LessonsListView, Converter={StaticResource NullConverter}}"/>
+                <AppBarButton Label="Start" Icon="Play" ToolTipService.ToolTip="Leertaste" Command="{Binding StartLessonCommand}"
+                              IsEnabled="{Binding SelectedItem, ElementName=LessonsListView, Converter={StaticResource NullConverter}}">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="None" Key="Space"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
 
-                <AppBarButton Label="Schnellstart" Icon="Next" AccessKey="F2" ToolTipService.ToolTip="F2" Command="{Binding QuickStartCommand}"/>
+                <AppBarButton Label="Schnellstart" Icon="Next" ToolTipService.ToolTip="F2" Command="{Binding QuickStartCommand}">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="None" Key="F2"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
 
                 <AppBarSeparator/>
 
@@ -82,12 +90,24 @@
 
                 <AppBarSeparator/>
 
-                <AppBarButton Label="Lektionen importieren" Icon="Import" AccessKey="F9" ToolTipService.ToolTip="F9" Command="{Binding ImportLessonsCommand}"/>
-                <AppBarButton Label="Lektionen exportieren" Icon="Filter" AccessKey="F5" ToolTipService.ToolTip="F5" Command="{Binding ExportLessonsCommand}"/>
+                <AppBarButton Label="Lektionen importieren" Icon="Import" ToolTipService.ToolTip="F9" Command="{Binding ImportLessonsCommand}">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="None" Key="F9"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
+                <AppBarButton Label="Lektionen exportieren" Icon="Filter" ToolTipService.ToolTip="F5" Command="{Binding ExportLessonsCommand}">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="None" Key="F5"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
 
                 <AppBarSeparator/>
 
-                <AppBarButton Label="Einstellungen" Icon="Setting" AccessKey="F12" ToolTipService.ToolTip="F12" Command="{Binding GoToSettingsCommand}"/>
+                <AppBarButton Label="Einstellungen" Icon="Setting" AccessKey="F12" ToolTipService.ToolTip="F12" Command="{Binding GoToSettingsCommand}">
+                    <AppBarButton.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="None" Key="F12"/>
+                    </AppBarButton.KeyboardAccelerators>
+                </AppBarButton>
 
             </StackPanel>
 

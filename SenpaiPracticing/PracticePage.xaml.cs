@@ -31,7 +31,7 @@ namespace SenpaiPracticing
         {
             InitializeComponent();
         }
-
+        
         #endregion
 
         #region Page Navigation
@@ -39,19 +39,22 @@ namespace SenpaiPracticing
         protected override void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             DebugHelper.WriteLine<PracticePage>();
+            
+            ViewModel = ViewModelProvider.GetViewModel<PracticeViewModel>();
 
-            //ViewModel = ViewModelProvider.GetViewModel<PracticeViewModel>();
+            PracticeViewModel practiceViewModel = ViewModel as PracticeViewModel;
 
+            practiceViewModel.EditFinished += PracticePage_EditFinished;
             //EPracticeState.CurrentChanged += EPracticeState_CurrentChanged;
 
-            //(ViewModel as PracticeViewModel).EditFinished += PracticePage_EditFinished;
-   
+            FocusRoot.Focus(FocusState.Programmatic);
+
             base.NavigationHelper_LoadState(sender, e);
         }
 
         private void PracticePage_EditFinished(object sender, EventArgs e)
         {
-            //FocusRoot.Focus(FocusState.Programmatic);
+            FocusRoot.Focus(FocusState.Programmatic);
         }
 
         protected override void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)

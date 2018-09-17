@@ -57,7 +57,7 @@ namespace Senpai
         private void LessonsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             MainViewModel vm = ViewModel as MainViewModel;
-
+            
             vm.LessonSelected(LessonsListView.SelectedItems.FirstOrDefault() as Lesson);
             vm.SelectedLessons = LessonsListView.SelectedItems.Cast<Lesson>().ToList();
         }

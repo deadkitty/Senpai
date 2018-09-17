@@ -35,8 +35,6 @@ namespace Senpai
 
             PracticeTimer.UpdateCurrentRound();
 
-            ESenpaiState.Current = ESenpaiState.Undefined;
-
             //AppSettings.Initialize();
             DataManager.Initialize();
         }
