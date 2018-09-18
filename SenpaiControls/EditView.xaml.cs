@@ -37,36 +37,22 @@ namespace SenpaiControls
 
             if(view.Word != null)
             {
-                view.FillProperties();
-            }
-        }
-
-        private void FillProperties()
-        {
-            foreach (EVocabType type in EditTypeListview.Items)
-            {
-                if (type == Word.VocabType)
+                foreach (EVocabType type in view.EditTypeListview.Items)
                 {
-                    EditTypeListview.SelectedItem = type;
-                    break;
+                    if (type == view.Word.VocabType)
+                    {
+                        view.EditTypeListview.SelectedItem = type;
+                        break;
+                    }
                 }
-            }
 
-            foreach (EVisibilityType flag in ShowWordListview.Items)
-            {
-                if (flag == Word.ShowWord)
+                foreach (EVisibilityType flag in view.ShowDescListview.Items)
                 {
-                    ShowWordListview.SelectedItem = flag;
-                    break;
-                }
-            }
-
-            foreach (EVisibilityType flag in ShowDescListview.Items)
-            {
-                if (flag == Word.ShowDesc)
-                {
-                    ShowDescListview.SelectedItem = flag;
-                    break;
+                    if (flag == view.Word.ShowDesc)
+                    {
+                        view.ShowDescListview.SelectedItem = flag;
+                        break;
+                    }
                 }
             }
         }
@@ -87,7 +73,6 @@ namespace SenpaiControls
         private void ThisView_Loaded(object sender, RoutedEventArgs e)
         {
             EditTypeListview.ItemsSource = EVocabType.GetList();
-            ShowWordListview.ItemsSource = EVisibilityType.GetList();
             ShowDescListview.ItemsSource = EVisibilityType.GetList();
         }
 
@@ -100,14 +85,6 @@ namespace SenpaiControls
             if (EditTypeListview.SelectedItems.Count > 0)
             {
                 Word.VocabType = EditTypeListview.SelectedItem as EVocabType;
-            }
-        }
-
-        private void ShowWordListview_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (ShowWordListview.SelectedItems.Count > 0)
-            {
-                Word.ShowWord = ShowWordListview.SelectedItem as EVisibilityType;
             }
         }
 

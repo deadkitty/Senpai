@@ -60,7 +60,7 @@ namespace SenpaiPracticing
         protected override void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
             //EPracticeState.CurrentChanged -= EPracticeState_CurrentChanged;
-            //(ViewModel as PracticeViewModel).EditFinished -= PracticePage_EditFinished;
+            (ViewModel as PracticeViewModel).EditFinished -= PracticePage_EditFinished;
             
             base.NavigationHelper_SaveState(sender, e);
         }

@@ -13,7 +13,12 @@ namespace SenpaiPracticing.Data
         String ShownText { get; }
         String HiddenText1 { get; }
         String HiddenText2 { get; }
+        
+        /// <summary>
+        /// returns the description, depending on the ShowDesc property
+        /// </summary>
         String Description { get; }
+
         String Example { get; }
         
         int LastRound { get; set; }
@@ -21,7 +26,10 @@ namespace SenpaiPracticing.Data
         float EFactor { get; set; }
 
         int Answer { get; set; }
-        
+
+        /// <summary>
+        /// returns the descripton of the word
+        /// </summary>
         String GetDescription();
     }
 }

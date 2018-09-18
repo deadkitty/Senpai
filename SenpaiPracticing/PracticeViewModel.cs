@@ -21,11 +21,39 @@ namespace SenpaiPracticing
 {
     public class PracticeViewModel : NyaViewModel
     {
+        #region Events
+
+        public event PropertyChangedCallback ActiveItemChanged;
+
+        #endregion
+
+        #region Fields
+
+        private List<Lesson> practiceLessons;
+
+        private List<BackItem> backStack;
+        private List<IVocabItem> gerItems;
+        private List<IVocabItem> japItems;
+        private List<IVocabItem> activeItems;
+
+        private IVocabItem activeItem;
+
+        private String description;
+
+        private int itemsCorrect = 0;
+        private int itemsWrong   = 0;
+        private int itemsLeft    = 0;
+
+        private EPracticeState practiceState;
+
+        private int givenAnswers = 0;
+
+        #endregion
+
         #region Properties
 
         #region Initialization Properties
 
-        private List<Lesson> practiceLessons;
         public List<Lesson> PracticeLessons
         {
             get => practiceLessons;
@@ -35,13 +63,7 @@ namespace SenpaiPracticing
         #endregion
 
         #region Active Properties
-
-        private List<IVocabItem> gerItems;
-        private List<IVocabItem> japItems;
-        private IVocabItem activeItem;
-
-        public event PropertyChangedCallback ActiveItemChanged;
-        
+                
         public List<IVocabItem> GerItems
         {
             get => gerItems;
@@ -60,26 +82,23 @@ namespace SenpaiPracticing
             set
             {
                 SetProperty(ref activeItem, value);
-                Description = activeItem.Description;
+                Description = activeItem?.Description;
                 ActiveItemChanged?.Invoke(null, null);
             }
         }
 
-        private List<IVocabItem> activeItems;
         public List<IVocabItem> ActiveItems
         {
             get => activeItems;
             set => SetProperty(ref activeItems, value);
         }
 
-        private List<BackItem> backStack;
         public List<BackItem> BackStack
         {
             get => backStack;
             set => SetProperty(ref backStack, value);
         }
         
-        private String description;
         public String Description
         {
             get => description;
@@ -89,10 +108,6 @@ namespace SenpaiPracticing
         #endregion
 
         #region Status Properties
-
-        private int itemsCorrect = 0;
-        private int itemsWrong   = 0;
-        private int itemsLeft    = 0;
 
         public int ItemsCorrect
         {
@@ -111,7 +126,13 @@ namespace SenpaiPracticing
             get => itemsLeft;
             set => SetProperty(ref itemsLeft, value);
         }
-        
+
+        public EPracticeState PracticeState
+        {
+            get => practiceState;
+            set => SetProperty(ref practiceState, value);
+        }
+
         #endregion
 
         #region Example Sentences
@@ -128,7 +149,7 @@ namespace SenpaiPracticing
         //{
         //    get => exampleParts;
         //    set => SetProperty(ref exampleParts, value);
-            
+
         //    //how to add new text to a richtextblock ...
         //    //Paragraph p = new Paragraph();
         //    //Run r = new Run()
@@ -145,7 +166,7 @@ namespace SenpaiPracticing
         //}
 
         #endregion
-        
+
         #endregion
 
         #region Constructor
@@ -161,15 +182,7 @@ namespace SenpaiPracticing
 
         public override void LoadState(LoadStateEventArgs args)
         {
-            PracticeState = EPracticeState.Questioning;
-
-            PracticeTimer.UpdateCurrentRound();
-            
-            LoadVocabItems();
-        }
-        
-        private void LoadVocabItems()
-        {
+            //add items which nextRounds property is smaller than the CurrentRound
             GerItems = new List<IVocabItem>();
             JapItems = new List<IVocabItem>();
 
@@ -189,6 +202,7 @@ namespace SenpaiPracticing
                 }
             }
 
+            //sort items by NextRound
             VocabItemComparer comparer = new VocabItemComparer();
 
             gerItems.Sort(comparer);
@@ -221,14 +235,15 @@ namespace SenpaiPracticing
                 }
             }
 
+            //set properties for the right start conditions
             ItemsLeft    = ActiveItems.Count;
             ItemsCorrect = 0;
             ItemsWrong   = 0;
 
-            ActiveItem = GetNextItem();
+            ActiveItem = ActiveItems.PopFront();
 
             LoadNewChibi();
-
+            
             PracticeState = EPracticeState.Questioning;
         }
 
@@ -268,19 +283,8 @@ namespace SenpaiPracticing
 
         #region Practice
 
-        #region Properties
+        #region Show Answer
 
-        private EPracticeState practiceState;
-        public EPracticeState PracticeState
-        {
-            get => practiceState;
-            set => SetProperty(ref practiceState, value);
-        }
-
-        #endregion
-
-        #region Commands
-        
         private DelegateCommand ShowAnswer;
         public DelegateCommand ShowAnswerCommand
         {
@@ -288,26 +292,17 @@ namespace SenpaiPracticing
             set => SetProperty(ref ShowAnswer, value);
         }
 
-        private DelegateCommand SkipItem;
-        public DelegateCommand SkipItemCommand
+        private void OnShowAnswer()
         {
-            get => SkipItem ?? (SkipItem = new DelegateCommand(OnSkipItem));
-            set => SetProperty(ref SkipItem, value);
+            PracticeState = EPracticeState.Answering;
+
+            //make description visible (if it was hidden before)
+            Description = ActiveItem.GetDescription();
         }
 
-        private DelegateCommand GetHint;
-        public DelegateCommand GetHintCommand
-        {
-            get => GetHint ?? (GetHint = new DelegateCommand(OnGetHint));
-            set => SetProperty(ref GetHint, value);
-        }
+        #endregion
 
-        private DelegateCommand GoBack;
-        public DelegateCommand GoBackCommand
-        {
-            get => GoBack ?? (GoBack = new DelegateCommand(OnGoBack));
-            set => SetProperty(ref GoBack, value);
-        }
+        #region Answer
 
         private RelayCommand<int> Evaluate;
         public RelayCommand<int> EvaluateCommand
@@ -316,63 +311,61 @@ namespace SenpaiPracticing
             set => SetProperty(ref Evaluate, value);
         }
 
-        #endregion
-
-        private void OnShowAnswer()
-        {
-            PracticeState = EPracticeState.Answering;
-
-            Description = ActiveItem.GetDescription();
-        }
-
-        private void OnSkipItem()
-        {
-            //TODO: BackItem hinzufügen und richtig auflösen
-            ActiveItems.PushBack(ActiveItem);
-            ActiveItem = GetNextItem();
-        }
-
-        private void OnGoBack()
-        {
-            if (BackStack.Count > 0)
-            {
-                ActiveItems.PushFront(ActiveItem);
-
-                BackItem backItem = BackStack.PopBack();
-
-                if (backItem.VocabItem.Answer < 2)
-                {
-                    --ItemsCorrect;
-                }
-                else
-                {
-                    --ItemsWrong;
-                }
-
-                ItemsLeft = activeItems.Count;
-
-                backItem.RollBack();
-
-                ActiveItem = backItem.VocabItem;
-
-                //set the practicestate again so the example string can update and is set ...
-                PracticeState = PracticeState;
-            }
-        }
-
-        private void OnGetHint()
-        {
-
-        }
-
         private void OnEvaluate(int answer)
         {
             BackStack.PushBack(new BackItem(ActiveItem));
 
+            EvaluateActiveItem(answer);
+
+            UpdateItemProperties(answer);
+
+            LoadNextItem();
+
+            ++givenAnswers;
+
+            if (givenAnswers % 40 == 0)
+            {
+                LoadNewChibi();
+                DataManager.SaveChanges();
+            }
+
+            PracticeState = EPracticeState.Questioning;
+        }
+
+        private void UpdateItemProperties(int answer)
+        {
+            if (answer < 2)
+            {
+                ++ItemsCorrect;
+            }
+            else
+            {
+                ++ItemsWrong;
+            }
+
+            ItemsLeft = ActiveItems.Count;
+        }
+
+        private void LoadNextItem()
+        {
+            if (ActiveItems.Count == 0)
+            {
+                ActiveItem = null;
+
+                ShowRoundFinishedDialog();
+            }
+            else
+            {
+                ActiveItem = ActiveItems.PopFront();
+            }
+        }
+        
+        private void EvaluateActiveItem(int answer)
+        {
             //TODO: schauen dass das hier passt mit dem zeitfenster zurückstellen von die lernitems, sonst vieleicht das ganze anpassen und die zeit langsamer zurücklaufen lassen mit indem 
             //ich das (Util.CurrentRound - ActiveItem.NextRound) mit 0,5 multipliziere oder sowas ...
-            int repetition = Math.Max(0, ActiveItem.NextRound - ActiveItem.LastRound - (PracticeTimer.CurrentRound - ActiveItem.NextRound));
-            //int repetition = ActiveItem.NextRound - ActiveItem.LastRound;
+            //int repetition = Math.Max(0, ActiveItem.NextRound - ActiveItem.LastRound - (PracticeTimer.CurrentRound - ActiveItem.NextRound));
+            int repetition = ActiveItem.NextRound - ActiveItem.LastRound;
 
             switch (answer)
             {
@@ -381,24 +374,16 @@ namespace SenpaiPracticing
                 case 2: Answer2(repetition); break;
                 case 3: Answer3(repetition); break;
             }
-            
+
             ActiveItem.EFactor = Math.Max(1.3f, ActiveItem.EFactor);
             ActiveItem.LastRound = PracticeTimer.CurrentRound;
 
-            InsertItem(answer);
-
-            UpdateStatusProperties(answer);
-
-            if (ActiveItems.Count == 0)
+            //if the answer was wrong, ask for it again at a later time
+            if (answer >= 2)
             {
-                PracticeState = EPracticeState.RoundFinished;
-                ShowSummary();
-            }
-            else
-            {
-                ActiveItem = GetNextItem();
+                int index = Math.Min(40, ActiveItems.Count);
 
-                PracticeState = EPracticeState.Questioning;
+                ActiveItems.Insert(index, ActiveItem);
             }
         }
 
@@ -453,38 +438,94 @@ namespace SenpaiPracticing
             ActiveItem.EFactor -= 0.2f;
         }
 
-        private void InsertItem(int answer)
+        #endregion
+
+        #region Go Back
+
+        private DelegateCommand GoBack;
+        public DelegateCommand GoBackCommand
         {
-            if (answer >= 2)
+            get => GoBack ?? (GoBack = new DelegateCommand(OnGoBack));
+            set => SetProperty(ref GoBack, value);
+        }
+
+        private void OnGoBack()
+        {
+            if (BackStack.Count > 0)
             {
-                ActiveItems.Add(ActiveItem);
+                BackItem backItem = BackStack.PopBack();
+
+                if (backItem.VocabItem.Answer < 2)
+                {
+                    --ItemsCorrect;
+                }
+                else
+                {
+                    --ItemsWrong;
+                }
+
+                backItem.RollBack();
+
+                if (ActiveItem == null)
+                {
+                    ItemsLeft = 1;
+                }
+                else
+                {
+                    ActiveItems.PushFront(ActiveItem);
+
+                    ItemsLeft = ActiveItems.Count + 1;
+
+                }
+
+                ActiveItem = backItem.VocabItem;
+
+                //set the practicestate again so the example string can update and is set ...
+                PracticeState = EPracticeState.Questioning;
             }
         }
 
-        private IVocabItem GetNextItem()
+        #endregion
+
+        #region Skip Item
+
+        private DelegateCommand SkipItem;
+        public DelegateCommand SkipItemCommand
         {
-            return ActiveItems.PopFront();
+            get => SkipItem ?? (SkipItem = new DelegateCommand(OnSkipItem));
+            set => SetProperty(ref SkipItem, value);
         }
 
-        private void UpdateStatusProperties(int answer)
+        private void OnSkipItem()
         {
-            if (answer < 2)
-            {
-                ++ItemsCorrect;
-            }
-            else
-            {
-                ++ItemsWrong;
-            }
-
-            ItemsLeft = ActiveItems.Count;
+            //TODO: BackItem hinzufügen und richtig auflösen
+            ActiveItems.PushBack(ActiveItem);
+            ActiveItem = ActiveItems.PopFront();
         }
+
+        #endregion
+
+        #region Get Hint
+
+        private DelegateCommand GetHint;
+        public DelegateCommand GetHintCommand
+        {
+            get => GetHint ?? (GetHint = new DelegateCommand(OnGetHint));
+            set => SetProperty(ref GetHint, value);
+        }
+
+        private void OnGetHint()
+        {
+
+        }
+
+        #endregion
 
         #endregion
 
         #region Round Finished
 
-        private async void ShowSummary()
+        private async void ShowRoundFinishedDialog()
         {
             MessageDialog msg = new MessageDialog("Keine Vokabeln mehr vorhanden ...", "Übung beendet.");
 
@@ -513,22 +554,7 @@ namespace SenpaiPracticing
 
         #region General
 
-        #region Properties
-
-        public event EventHandler EditFinished;
-
-        private Word backupItem = null;
-        private Word editItem = null;
-        //private bool editModeActive = false;
-        public Word EditItem
-        {
-            get => editItem;
-            set => SetProperty(ref editItem, value);
-        }
-
-        #endregion
-
-        #region Commands
+        #region Quit Practice
 
         private DelegateCommand Quit;
         public DelegateCommand QuitCommand
@@ -537,11 +563,36 @@ namespace SenpaiPracticing
             set => SetProperty(ref Quit, value);
         }
 
-        private DelegateCommand Settings;
-        public DelegateCommand SettingsCommand
+        private async void OnQuit()
         {
-            get => Settings ?? (Settings = new DelegateCommand(OnSettings));
-            set => SetProperty(ref Settings, value);
+            //both commands use the same shortcut (escape) so i have to decide by the current state which code to be executed ... 
+            //unfortunately i can't decide it by which view has the focus ... 
+            if (PracticeState == EPracticeState.Editing)
+            {
+                return;
+            }
+
+            MessageDialog quitDialog = new MessageDialog("Übung beenden");
+
+            quitDialog.Commands.Add(new UICommand("Beenden", EndPracticeCallback));
+            quitDialog.Commands.Add(new UICommand("Abbrechen"));
+
+            await quitDialog.ShowAsync(); 
+        }
+
+        #endregion
+
+        #region Edit Word
+
+        public event EventHandler EditFinished;
+
+        private Word backupItem = null;
+        private Word editItem = null;
+
+        public Word EditItem
+        {
+            get => editItem;
+            set => SetProperty(ref editItem, value);
         }
 
         private DelegateCommand Edit;
@@ -558,37 +609,11 @@ namespace SenpaiPracticing
             set => SetProperty(ref CancelEdit, value);
         }
 
-        #endregion
-
-        #region Quit Practice
-
-        private async void OnQuit()
-        {
-            //both commands use the same shortcut (escape) so i have to decide by the current state which code to be executed ... 
-            //unfortunately i can't decide it by which view has the focus ... 
-            if (PracticeState == EPracticeState.Editing)
-            {
-                OnCancelEdit();
-            }
-            else
-            {
-                MessageDialog quitDialog = new MessageDialog("Übung beenden");
-                quitDialog.Commands.Add(new UICommand("Beenden", EndPracticeCallback));
-                quitDialog.Commands.Add(new UICommand("Abbrechen"));
-
-                await quitDialog.ShowAsync(); 
-            }
-        }
-
-        #endregion
-
-        #region Edit Word
-
         private void OnEdit()
         {
             if (PracticeState == EPracticeState.Editing)
             {
-                CloseEditView();
+                SaveChanges();
             }
             else
             {
@@ -604,22 +629,15 @@ namespace SenpaiPracticing
             EditItem = ActiveItem.Source;
         }
 
-        private void CloseEditView()
+        private void SaveChanges()
         {
-            EditItem = null;
-
-            if (PracticeState == EPracticeState.Questioning)
-            {
-                Description = ActiveItem.Description;
-            }
-            else
-            {
-                Description = ActiveItem.GetDescription();
-            }
+            Description = ActiveItem.GetDescription();
             
             NotifyPropertyChanged("ActiveItem");
 
             EditFinished?.Invoke(this, null);
+
+            DataManager.SaveChanges();
 
             PracticeState = EPracticeState.Answering;
         }
@@ -631,14 +649,19 @@ namespace SenpaiPracticing
 
             EditFinished?.Invoke(this, null);
 
-            EditItem = null;
-
             PracticeState = EPracticeState.Answering;
         }
 
         #endregion
 
         #region Go to Settings Page
+        
+        private DelegateCommand Settings;
+        public DelegateCommand SettingsCommand
+        {
+            get => Settings ?? (Settings = new DelegateCommand(OnSettings));
+            set => SetProperty(ref Settings, value);
+        }
 
         private void OnSettings()
         {
