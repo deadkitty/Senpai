@@ -47,14 +47,14 @@ namespace SenpaiPracticing
             practiceViewModel.EditFinished += PracticePage_EditFinished;
             //EPracticeState.CurrentChanged += EPracticeState_CurrentChanged;
 
-            FocusRoot.Focus(FocusState.Programmatic);
+            FocusRoot.Focus(FocusState.Pointer);
 
             base.NavigationHelper_LoadState(sender, e);
         }
 
         private void PracticePage_EditFinished(object sender, EventArgs e)
         {
-            FocusRoot.Focus(FocusState.Programmatic);
+            FocusRoot.Focus(FocusState.Pointer);
         }
 
         protected override void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)

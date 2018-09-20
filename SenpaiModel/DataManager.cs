@@ -12,15 +12,9 @@ namespace SenpaiModel
 {
     public static class DataManager
     {
-        #region Fields
-
-        private static SenpaiDatabase database;
-
-        #endregion
-
         #region Properties
 
-        public static SenpaiDatabase Database => database;
+        public static SenpaiDatabase Database { get; private set; }
 
         #endregion
 
@@ -28,19 +22,19 @@ namespace SenpaiModel
 
         public static void Initialize()
         {
-            if (database == null)
+            if (Database == null)
             {
-                database = new SenpaiDatabase();
-                database.Database.Migrate();
+                Database = new SenpaiDatabase();
+                Database.Database.Migrate();
             }
         }
 
         public static void Uninitialize()
         {
-            if (database != null)
+            if (Database != null)
             {
-                database.Dispose();
-                database = null;
+                Database.Dispose();
+                Database = null;
             }
         }
 
@@ -50,7 +44,7 @@ namespace SenpaiModel
 
         public static void SaveChanges()
         {
-            database.SaveChanges();
+            Database.SaveChanges();
         }
 
         #endregion
@@ -59,7 +53,7 @@ namespace SenpaiModel
 
         public static void ResetDatabase()
         {
-            foreach (Lesson lesson in database.Lessons)
+            foreach (Lesson lesson in Database.Lessons)
             {
                 ResetLesson(lesson);
             }
@@ -156,7 +150,7 @@ namespace SenpaiModel
         public static String Export(Stream exportStream)
         {
             List<Lesson> lessons = 
-                database.Lessons.Include(x => x.Words)
+                Database.Lessons.Include(x => x.Words)
                                 .Include(x => x.Kanjis).ToList();
             
             //TODO: nochmal testen was das macht und dann raus damit (oder auch nich)

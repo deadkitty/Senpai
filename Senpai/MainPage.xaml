@@ -67,7 +67,7 @@
                     </AppBarButton.KeyboardAccelerators>
                 </AppBarButton>
 
-                <AppBarButton Label="Schnellstart" Icon="Next" ToolTipService.ToolTip="F2" Command="{Binding QuickStartCommand}">
+                <AppBarButton Label="Schnellstart" Icon="Next" ToolTipService.ToolTip="F2" Command="{Binding QuickStartCommand}" x:Name="QuickStartButton">
                     <AppBarButton.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="None" Key="F2"/>
                     </AppBarButton.KeyboardAccelerators>
@@ -123,8 +123,10 @@
                 <RowDefinition/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-
-            <TextBlock Text="Lektionen:" Grid.Row="0" Grid.Column="0" Margin="20,10"/>
+            
+            <!--der textblock bekommt nen namen damit ich den anfokusieren kann programmiertechnisch.
+                dadurch kann ich gleich loslegen und die leertaste drücken ohne das das programm denkt ich will nen button in der commandoleiste drücken ...-->
+            <TextBlock x:Name="FocusRoot" Text="Lektionen:" Grid.Row="0" Grid.Column="0" Margin="20,10"/>
             <TextBox x:Name="SearchTextbox" PlaceholderText="Suche ..." FontSize="{StaticResource NormalBrushSize}" Grid.Row="0" Grid.Column="1" Margin="10,10,20,10" TextChanged="SearchTextbox_TextChanged"/>
 
             <ctrl:LoadingControl x:Name="LoadingCtrl" Grid.Column="1" Grid.Row="1" IsLoading="{Binding IsSearching, FallbackValue=true}" LoadingText="{Binding IsSearchingText}" VerticalAlignment="Center" HorizontalAlignment="Center"/>

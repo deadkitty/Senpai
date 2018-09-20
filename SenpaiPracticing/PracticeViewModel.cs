@@ -37,9 +37,7 @@ namespace SenpaiPracticing
         private List<IVocabItem> activeItems;
 
         private IVocabItem activeItem;
-
-        private String description;
-
+        
         private int itemsCorrect = 0;
         private int itemsWrong   = 0;
         private int itemsLeft    = 0;
@@ -82,7 +80,6 @@ namespace SenpaiPracticing
             set
             {
                 SetProperty(ref activeItem, value);
-                Description = activeItem?.Description;
                 ActiveItemChanged?.Invoke(null, null);
             }
         }
@@ -97,12 +94,6 @@ namespace SenpaiPracticing
         {
             get => backStack;
             set => SetProperty(ref backStack, value);
-        }
-        
-        public String Description
-        {
-            get => description;
-            set => SetProperty(ref description, value);
         }
 
         #endregion
@@ -295,9 +286,6 @@ namespace SenpaiPracticing
         private void OnShowAnswer()
         {
             PracticeState = EPracticeState.Answering;
-
-            //make description visible (if it was hidden before)
-            Description = ActiveItem.GetDescription();
         }
 
         #endregion
@@ -328,8 +316,6 @@ namespace SenpaiPracticing
                 LoadNewChibi();
                 DataManager.SaveChanges();
             }
-
-            PracticeState = EPracticeState.Questioning;
         }
 
         private void UpdateItemProperties(int answer)
@@ -350,12 +336,14 @@ namespace SenpaiPracticing
         {
             if (ActiveItems.Count == 0)
             {
-                ActiveItem = null;
+                PracticeState = EPracticeState.RoundFinished;
 
                 ShowRoundFinishedDialog();
             }
             else
             {
+                PracticeState = EPracticeState.Questioning;
+
                 ActiveItem = ActiveItems.PopFront();
             }
         }
@@ -377,14 +365,6 @@ namespace SenpaiPracticing
 
             ActiveItem.EFactor = Math.Max(1.3f, ActiveItem.EFactor);
             ActiveItem.LastRound = PracticeTimer.CurrentRound;
-
-            //if the answer was wrong, ask for it again at a later time
-            if (answer >= 2)
-            {
-                int index = Math.Min(40, ActiveItems.Count);
-
-                ActiveItems.Insert(index, ActiveItem);
-            }
         }
 
         private void Answer0(int repetition)
@@ -429,6 +409,8 @@ namespace SenpaiPracticing
             }
 
             ActiveItem.EFactor -= 0.1f;
+
+            InsertWrongItem();
         }
 
         private void Answer3(int repetition)
@@ -436,6 +418,16 @@ namespace SenpaiPracticing
             ActiveItem.NextRound = PracticeTimer.CurrentRound;
 
             ActiveItem.EFactor -= 0.2f;
+
+            InsertWrongItem();
+        }
+
+        private void InsertWrongItem()
+        {
+            //if the answer was wrong, ask for it again at a later time
+            int index = Math.Min(40, ActiveItems.Count);
+
+            ActiveItems.Insert(index, ActiveItem);
         }
 
         #endregion
@@ -466,7 +458,7 @@ namespace SenpaiPracticing
 
                 backItem.RollBack();
 
-                if (ActiveItem == null)
+                if (PracticeState == EPracticeState.RoundFinished)
                 {
                     ItemsLeft = 1;
                 }
@@ -475,9 +467,8 @@ namespace SenpaiPracticing
                     ActiveItems.PushFront(ActiveItem);
 
                     ItemsLeft = ActiveItems.Count + 1;
-
                 }
-
+                
                 ActiveItem = backItem.VocabItem;
 
                 //set the practicestate again so the example string can update and is set ...
@@ -529,25 +520,25 @@ namespace SenpaiPracticing
         {
             MessageDialog msg = new MessageDialog("Keine Vokabeln mehr vorhanden ...", "Übung beendet.");
 
-            msg.Commands.Add(new UICommand("Zurück", GoBackCallback));
             msg.Commands.Add(new UICommand("Beenden", EndPracticeCallback));
+            msg.Commands.Add(new UICommand("Zurück", GoBackCallback));
 
             await msg.ShowAsync();
-        }
-
-        private void GoBackCallback(IUICommand command)
-        {
-            OnGoBack();
         }
 
         private void EndPracticeCallback(IUICommand command)
         {
             Frame frame = Window.Current.Content as Frame;
-
+            
             if (frame.CanGoBack)
             {
                 frame.GoBack();
             }
+        }
+
+        private void GoBackCallback(IUICommand command)
+        {
+            OnGoBack();
         }
 
         #endregion
@@ -631,8 +622,6 @@ namespace SenpaiPracticing
 
         private void SaveChanges()
         {
-            Description = ActiveItem.GetDescription();
-            
             NotifyPropertyChanged("ActiveItem");
 
             EditFinished?.Invoke(this, null);

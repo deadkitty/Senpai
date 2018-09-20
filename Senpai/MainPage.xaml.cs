@@ -42,6 +42,8 @@ namespace Senpai
 
             ViewModel = ViewModelProvider.GetViewModel<MainViewModel>();
             
+            FocusRoot.Focus(FocusState.Pointer);
+
             base.NavigationHelper_LoadState(sender, e);
         }
 

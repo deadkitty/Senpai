@@ -113,9 +113,12 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" Style="{StaticResource VocabDescription}" Text="{Binding Description}">な-Adjektiv</TextBlock>
+            <TextBlock Grid.Row="0" Style="{StaticResource VocabDescription}" Text="{Binding ActiveItem.Description1}" Visibility="{Binding PracticeState, Converter={StaticResource QuestionToVisible}}">な-Adjektiv</TextBlock>
+            <TextBlock Grid.Row="0" Style="{StaticResource VocabDescription}" Text="{Binding ActiveItem.Description2}" Visibility="{Binding PracticeState, Converter={StaticResource AnswerToVisible}}">な-Adjektiv</TextBlock>
 
             <Grid Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding PracticeState, Converter={StaticResource QuestionToVisible}, FallbackValue=Visible}" Padding="30">
+                <!--der textblock bekommt nen namen damit ich den anfokusieren kann programmiertechnisch.
+                    dadurch kann ich gleich loslegen und die leertaste drücken ohne das das programm denkt ich will nen button in der commandoleiste drücken ...-->
                 <TextBlock x:Name="FocusRoot" Grid.Row="0" Text="{Binding ActiveItem.ShownText}" FontSize="65">大好き</TextBlock>
             </Grid>
             <StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding PracticeState, Converter={StaticResource AnswerToVisible}, FallbackValue=Collapsed}">

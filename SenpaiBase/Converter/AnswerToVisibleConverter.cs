@@ -13,7 +13,8 @@ namespace SenpaiBase.Converter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return value == EPracticeState.Answering ? Visibility.Visible : Visibility.Collapsed;
+            return value == EPracticeState.Answering
+                || value == EPracticeState.RoundFinished ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

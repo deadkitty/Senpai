@@ -65,49 +65,7 @@ namespace Senpai
 
         public override void LoadState(LoadStateEventArgs args)
         {
-            AddSortIndexToKanjiLessons();
-
             Lessons = DataManager.Database.Lessons.OrderBy(x => x.SortIndex).ToList();
-            
-            //Lesson lesson1 = new Lesson()
-            //{
-            //      Name      = "Minna no Nihongo 1"
-            //    , Size      = 0
-            //    , SortIndex = 0
-            //    , Type      = ELessonType.Vocab
-            //};
-            
-            //Lesson lesson2 = new Lesson()
-            //{
-            //      Name      = "Minna no Nihongo 2"
-            //    , Size      = 0
-            //    , SortIndex = 1
-            //    , Type      = ELessonType.Vocab
-            //};
-            
-            //Lesson lesson3 = new Lesson()
-            //{
-            //      Name      = "Tobira 1"
-            //    , Size      = 0
-            //    , SortIndex = 2
-            //    , Type      = ELessonType.Vocab
-            //};
-            
-            //Lesson lesson4 = new Lesson()
-            //{
-            //      Name      = "Tobira 2"
-            //    , Size      = 0
-            //    , SortIndex = 3
-            //    , Type      = ELessonType.Vocab
-            //};
-
-            //Lessons = new List<Lesson>()
-            //{
-            //    lesson1,
-            //    lesson2,
-            //    lesson3,
-            //    lesson4
-            //};
         }
 
         #endregion

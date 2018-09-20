@@ -23,7 +23,8 @@ namespace SenpaiPracticing.Data
         public string HiddenText1 => String.IsNullOrEmpty(Source.Kanji) ? Source.Kana : Source.Kanji;
         public string HiddenText2 => String.IsNullOrEmpty(Source.Kanji) ? String.Empty : Source.Kana;
 
-        public string Description => GetDescriptionText();
+        public string Description1 => GetDescriptionText();
+        public string Description2 => Source.ToDescriptionString();
 
         public string Example => Source.Example;
 
@@ -32,11 +33,6 @@ namespace SenpaiPracticing.Data
         public float EFactor { get => Source.  EFactorGer; set => Source.  EFactorGer = value; }
 
         public int Answer { get; set; } = -1;
-
-        public string GetDescription()
-        {
-            return Source.ToDescriptionString();
-        }
 
         public GerJapItem(Word source)
         {
