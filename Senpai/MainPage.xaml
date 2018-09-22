@@ -143,14 +143,14 @@
                 SelectionChanged="LessonsListView_SelectionChanged">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <views:LessonView Lesson="{Binding}"/>
-                        </Grid>
+                        <views:LessonView Lesson="{Binding}"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="MinHeight" Value="10"/>
+                        <Setter Property="Height" Value="auto"/>
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>
@@ -167,11 +167,15 @@
                 ItemsSource="{Binding LessonItems}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <views:LessonItemView LessonItem="{Binding}"/>
-                        </Grid>
+                        <views:LessonItemView LessonItem="{Binding}"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="MinHeight" Value="10"/>
+                        <Setter Property="Height" Value="auto"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
             </ListView>
 
         </Grid>
