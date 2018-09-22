@@ -66,6 +66,11 @@ namespace Senpai
         public override void LoadState(LoadStateEventArgs args)
         {
             Lessons = DataManager.Database.Lessons.OrderBy(x => x.SortIndex).ToList();
+
+            //TraverseWordsAndDoSomething((Word word) =>
+            //{
+            //    return word;
+            //}, true);
         }
 
         #endregion
@@ -74,7 +79,7 @@ namespace Senpai
 
         public void LessonSelected(Lesson selectedLesson)
         {
-            LessonItems = selectedLesson == null ? null : DataManager.Database.Words.Where(x => x.Lesson == selectedLesson).ToList<LessonItem>();
+            LessonItems = selectedLesson.GetItems();
         }
 
         #endregion
@@ -92,10 +97,10 @@ namespace Senpai
             PracticeTimer.UpdateCurrentRound();
 
             bool lessonsValid = false;
-
+            
             foreach (Lesson lesson in SelectedLessons)
             {
-                if (lesson.NextRound > 0 && lesson.NextRound <= PracticeTimer.CurrentRound)
+                if (lesson.NextRound >= 0 && lesson.NextRound <= PracticeTimer.CurrentRound)
                 {
                     lessonsValid = true;
 
@@ -152,7 +157,7 @@ namespace Senpai
 
             foreach (Lesson lesson in SelectedLessons)
             {
-                lesson.Words = DataManager.Database.Words.Where(x => x.Lesson == lesson).ToList();
+                lesson.Words = lesson.GetWords();
             }
 
             practiceVM.PracticeLessons = SelectedLessons;
@@ -343,6 +348,32 @@ namespace Senpai
         #endregion
 
         #region Others
+
+        /// <summary>
+        /// geht über alle wörter und kann dann irgendwas machen ... textstellen ersetzen zb ...
+        /// Verwendung der Funktion:
+        /// (Word word) =>
+        /// {
+        ///     return word;
+        /// }
+        /// </summary>
+        private void TraverseWordsAndDoSomething(Func<Word, Word> function, bool saveChanges)
+        {
+            foreach (Lesson lesson in Lessons)
+            {
+                lesson.Words = lesson.GetWords();
+
+                foreach (Word word in lesson.Words)
+                {
+                    function?.Invoke(word);
+                }
+            }
+
+            if (saveChanges)
+            {
+                DataManager.SaveChanges();
+            }
+        }
 
         /// <summary>
         /// adds a sort index from 100 up, so that i don't have to see them while i actually work with the vocab lessons ;D

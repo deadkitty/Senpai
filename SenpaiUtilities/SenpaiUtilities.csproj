@@ -106,9 +106,11 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DatabaseUtilities.cs" />
     <Compile Include="LessonComparer.cs" />
     <Compile Include="PracticeTimer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextUtilities.cs" />
     <EmbeddedResource Include="Properties\SenpaiUtilities.rd.xml" />
   </ItemGroup>
   <ItemGroup>

@@ -64,10 +64,10 @@
             <TextBlock Grid.Row="6" Text="Beschreibung"/>
             <TextBlock Grid.Row="8" Text="Beispiel"/>
 
-            <TextBox Grid.Row="1" Text="{Binding Word.Kana,        ElementName=thisView, Mode=TwoWay}"/>
-            <TextBox Grid.Row="3" Text="{Binding Word.Kanji,       ElementName=thisView, Mode=TwoWay}"/>
-            <TextBox Grid.Row="5" Text="{Binding Word.Translation, ElementName=thisView, Mode=TwoWay}"/>
-            <TextBox Grid.Row="7" Text="{Binding Word.Description, ElementName=thisView, Mode=TwoWay}"/>
+            <TextBox Grid.Row="1" Text="{Binding Word.Kana,        ElementName=thisView, Mode=TwoWay}" InputScope="Hiragana"/>
+            <TextBox Grid.Row="3" Text="{Binding Word.Kanji,       ElementName=thisView, Mode=TwoWay}" InputScope="Hiragana"/>
+            <TextBox Grid.Row="5" Text="{Binding Word.Translation, ElementName=thisView, Mode=TwoWay}" />
+            <TextBox Grid.Row="7" Text="{Binding Word.Description, ElementName=thisView, Mode=TwoWay}" />
             <TextBox Grid.Row="9" Text="{Binding Word.Example,     ElementName=thisView, Mode=TwoWay}" TextWrapping="Wrap"/>
 
         </Grid>

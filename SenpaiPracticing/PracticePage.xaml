@@ -127,8 +127,9 @@
                 <TextBlock FontSize="40" Text="{Binding ActiveItem.HiddenText2}">lieben</TextBlock>
             </StackPanel>
 
-            <TextBlock x:Name="ExampleTextblock" VerticalAlignment="Bottom" FontSize="25" Margin="20" TextAlignment="Left"/>
-            
+            <TextBlock x:Name="ExampleTextblock1" VerticalAlignment="Bottom" FontSize="25" Margin="20" TextAlignment="Left" Visibility="{Binding PracticeState, Converter={StaticResource QuestionToVisible}}"/>
+            <TextBlock x:Name="ExampleTextblock2" VerticalAlignment="Bottom" FontSize="25" Margin="20" TextAlignment="Left" Visibility="{Binding PracticeState, Converter={StaticResource AnswerToVisible}}"/>
+
             <Image Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Source="{Binding ChibiSource}" Margin="30, 10" Stretch="None"/>
 
             <Grid Grid.Row="1">

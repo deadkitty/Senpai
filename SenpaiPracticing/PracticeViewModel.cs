@@ -575,7 +575,7 @@ namespace SenpaiPracticing
 
         #region Edit Word
 
-        public event EventHandler EditFinished;
+        //public event EventHandler EditFinished;
 
         private Word backupItem = null;
         private Word editItem = null;
@@ -624,7 +624,7 @@ namespace SenpaiPracticing
         {
             NotifyPropertyChanged("ActiveItem");
 
-            EditFinished?.Invoke(this, null);
+            //EditFinished?.Invoke(this, null);
 
             DataManager.SaveChanges();
 
@@ -636,7 +636,7 @@ namespace SenpaiPracticing
             //revert changes made by the user
             ActiveItem.Source.CopyValues(backupItem);
 
-            EditFinished?.Invoke(this, null);
+            //EditFinished?.Invoke(this, null);
 
             PracticeState = EPracticeState.Answering;
         }
