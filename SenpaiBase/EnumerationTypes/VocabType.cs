@@ -91,7 +91,6 @@ namespace SenpaiBase.EnumerationTypes
         {
             switch (value)
             {
-                case _Other       : return Other;
                 case _Noun        : return Noun;
                 case _Verb1Trans  : return Verb1Trans;
                 case _Verb2Trans  : return Verb2Trans;
@@ -118,7 +117,7 @@ namespace SenpaiBase.EnumerationTypes
                 case _Pronoun     : return Pronoun;
             }
 
-            throw new ArgumentOutOfRangeException();
+            return Other;
         }
 
         public override string ToString()

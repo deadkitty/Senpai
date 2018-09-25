@@ -52,14 +52,6 @@
             <Setter Property="Background"          Value="{StaticResource ButtonBackground}"/>
         </Style>
         
-        <!--<Style TargetType="ctrl:NyaButton">
-            <Setter Property="Margin"              Value="10, 5"/>
-            <Setter Property="BorderBrush"         Value="Black"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="FontSize"            Value="2"/>
-            <Setter Property="Background"          Value="Blue"/>
-        </Style>-->
-
         <x:Int32 x:Key="answer1">0</x:Int32>
         <x:Int32 x:Key="answer2">1</x:Int32>
         <x:Int32 x:Key="answer3">2</x:Int32>
@@ -112,6 +104,8 @@
                 <RowDefinition/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
+            
+            <Image Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Source="{Binding ChibiSource}" Margin="30, 10" Stretch="None"/>
 
             <TextBlock Grid.Row="0" Style="{StaticResource VocabDescription}" Text="{Binding ActiveItem.Description1}" Visibility="{Binding PracticeState, Converter={StaticResource QuestionToVisible}}">な-Adjektiv</TextBlock>
             <TextBlock Grid.Row="0" Style="{StaticResource VocabDescription}" Text="{Binding ActiveItem.Description2}" Visibility="{Binding PracticeState, Converter={StaticResource AnswerToVisible}}">な-Adjektiv</TextBlock>
@@ -129,8 +123,6 @@
 
             <TextBlock x:Name="ExampleTextblock1" VerticalAlignment="Bottom" FontSize="25" Margin="20" TextAlignment="Left" Visibility="{Binding PracticeState, Converter={StaticResource QuestionToVisible}}"/>
             <TextBlock x:Name="ExampleTextblock2" VerticalAlignment="Bottom" FontSize="25" Margin="20" TextAlignment="Left" Visibility="{Binding PracticeState, Converter={StaticResource AnswerToVisible}}"/>
-
-            <Image Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Source="{Binding ChibiSource}" Margin="30, 10" Stretch="None"/>
 
             <Grid Grid.Row="1">
                 
